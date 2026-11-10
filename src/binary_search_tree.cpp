@@ -20,23 +20,31 @@ void BinarySearchTree::deleteSubtree(TreeNode* node) {
 }
 
 bool BinarySearchTree::insert(int value) {
-    (void)value;
-    throw std::logic_error("Student implementation required: insert");
+    if (searchRecursive(root_, value)) {
+        return false;
+    }
+
+    root_ = insertRecursive(root_, value);
+    ++size_;
+    return true;
 }
 
 bool BinarySearchTree::remove(int value) {
-    (void)value;
-    throw std::logic_error("Student implementation required: remove");
+    if (!searchRecursive(root_, value)) {
+        return false;
+    }
+
+    root_ = removeRecursive(root_, value);
+    --size_;
+    return true;
 }
 
 bool BinarySearchTree::search(int value) const {
-    (void)value;
-    throw std::logic_error("Student implementation required: search");
+    return searchRecursive(root_, value);
 }
 
 bool BinarySearchTree::contains(int value) const {
-    (void)value;
-    throw std::logic_error("Student implementation required: contains");
+    return search(value);
 }
 
 bool BinarySearchTree::empty() const noexcept {
@@ -84,52 +92,93 @@ int BinarySearchTree::maximum() const {
 }
 
 TreeNode* BinarySearchTree::insertRecursive(TreeNode* node, int value) {
-    (void)node;
-    (void)value;
-    throw std::logic_error("Student implementation required: insertRecursive");
+    if (node == nullptr) {
+        return new TreeNode(value);
+    }
+
+    if (value < node->value) {
+        node->left = insertRecursive(node->left, value);
+    } else {
+        node->right = insertRecursive(node->right, value);
+    }
+    return node;
 }
 
 TreeNode* BinarySearchTree::removeRecursive(TreeNode* node, int value) {
-    (void)node;
-    (void)value;
-    throw std::logic_error("Student implementation required: removeRecursive");
+    if (node == nullptr) {
+        return nullptr;
+    }
+
+    if (value < node->value) {
+        node->left = removeRecursive(node->left, value);
+    } else if (value > node->value) {
+        node->right = removeRecursive(node->right, value);
+    } else if (node->left == nullptr) {
+        TreeNode* rightChild = node->right;
+        delete node;
+        return rightChild;
+    } else if (node->right == nullptr) {
+        TreeNode* leftChild = node->left;
+        delete node;
+        return leftChild;
+    } else {
+        const int successorValue = minimumRecursive(node->right);
+        node->value = successorValue;
+        node->right = removeRecursive(node->right, successorValue);
+    }
+    return node;
 }
 
 bool BinarySearchTree::searchRecursive(const TreeNode* node, int value) const {
-    (void)node;
-    (void)value;
-    throw std::logic_error("Student implementation required: searchRecursive");
+    if (node == nullptr) {
+        return false;
+    }
+    if (value == node->value) {
+        return true;
+    }
+    return value < node->value
+        ? searchRecursive(node->left, value)
+        : searchRecursive(node->right, value);
 }
 
 void BinarySearchTree::inorderRecursive(const TreeNode* node, std::vector<int>& result) const {
-    (void)node;
-    (void)result;
-    throw std::logic_error("Student implementation required: inorderRecursive");
+    if (node == nullptr) {
+        return;
+    }
+    inorderRecursive(node->left, result);
+    result.push_back(node->value);
+    inorderRecursive(node->right, result);
 }
 
 void BinarySearchTree::preorderRecursive(const TreeNode* node, std::vector<int>& result) const {
-    (void)node;
-    (void)result;
-    throw std::logic_error("Student implementation required: preorderRecursive");
+    if (node == nullptr) {
+        return;
+    }
+    result.push_back(node->value);
+    preorderRecursive(node->left, result);
+    preorderRecursive(node->right, result);
 }
 
 void BinarySearchTree::postorderRecursive(const TreeNode* node, std::vector<int>& result) const {
-    (void)node;
-    (void)result;
-    throw std::logic_error("Student implementation required: postorderRecursive");
+    if (node == nullptr) {
+        return;
+    }
+    postorderRecursive(node->left, result);
+    postorderRecursive(node->right, result);
+    result.push_back(node->value);
 }
 
 int BinarySearchTree::heightRecursive(const TreeNode* node) const {
-    (void)node;
-    throw std::logic_error("Student implementation required: heightRecursive");
+    if (node == nullptr) {
+        return 0;
+    }
+    return 1 + std::max(heightRecursive(node->left), heightRecursive(node->right));
 }
 
 int BinarySearchTree::minimumRecursive(const TreeNode* node) const {
-    (void)node;
-    throw std::logic_error("Student implementation required: minimumRecursive");
+    return node->left == nullptr ? node->value : minimumRecursive(node->left);
 }
 
 int BinarySearchTree::maximumRecursive(const TreeNode* node) const {
-    (void)node;
-    throw std::logic_error("Student implementation required: maximumRecursive");
+    return node->right == nullptr ? node->value : maximumRecursive(node->right);
 }

@@ -1,34 +1,19 @@
 # Binary Search Tree Analysis
 
-## Core operations
+For a tree of `n` nodes and height `h`, insertion, search, removal, and minimum or
+maximum lookup take O(h) time. A balanced tree has height O(log n), so these
+operations are O(log n) on average. A skewed tree has height O(n), making them
+O(n) in the worst case; inserting already sorted values can produce this shape.
+The best case for search is O(1), when the requested value is at the root.
 
-Students should analyze the following BST operations:
+In-order, pre-order, and post-order traversals visit every node, so each takes
+O(n) time. Height calculation also takes O(n), because it examines both
+subtrees. The recursive operations use O(h) call-stack space; a balanced tree
+needs O(log n), while a skewed tree needs O(n). Traversals additionally return
+a vector containing n values.
 
-- insertion;
-- search;
-- deletion;
-- traversal;
-- minimum/maximum lookup;
-- subtree height.
-
-## Required discussion
-
-Provide a short analysis comparing the complexity of the following operations:
-
-- best-case vs. worst-case behavior;
-- average-case behavior for a balanced BST;
-- worst-case behavior for a skewed tree;
-- recursive vs. iterative implementations;
-- how tree height affects search cost.
-
-## Expected Big-O summary
-
-Students should identify the Big-Oh complexity for:
-
-- `insert`
-- `search`
-- `remove`
-- `inorderTraversal`
-- `height`
-
-For a balanced binary search tree, expected operations are near O(log n), while a degenerate tree can degrade to O(n).
+Recursive implementations follow the tree structure directly and are concise.
+Iterative implementations can avoid call-stack growth by using explicit stacks,
+but require additional bookkeeping. Neither approach balances this BST, so
+operation efficiency depends on its shape. A self-balancing tree is preferable
+when guaranteed logarithmic operations are required.
